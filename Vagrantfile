@@ -88,30 +88,8 @@ SCRIPT
 Vagrant.configure("2") do |config|
   config.cache.auto_detect = true
 
-  # config.vm.provider :aws do |aws|
-  #   aws.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-  #   aws.secret_access_key = "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"
-  #   aws.region_config "us-east-1", :ami => "ami-a73264ce"
-  #   aws.keypair_name = 'ec2_key'
-
-  #   override.ssh.username = "ubuntu"
-  #   override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
-  # end
-
-  config.vm.define :master do |master,override|
-    master.vm.box = "aws_dummy"
-    master.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-    master.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-    master.secret_access_key = "nrsTCWupE8Sf7jCv8+dk5uAAW1YLW7CJzNtxkLSO"
-    master.region_config "us-east-1", :ami => "ami-a73264ce"
-    master.keypair_name = 'ec2_key'
-    master.instance_type
-    master.security_groups = 'vagrant'
-
-    override.ssh.username = "ubuntu"
-    override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
-
-    # master.vm.box = "precise64"
+  config.vm.define :master do |master|
+    master.vm.box = "aws_box"
     # master.vm.provider :virtualbox do |v|
     #   v.name = "vm-cluster-node1"
     #   v.customize ["modifyvm", :id, "--memory", "4096"]
@@ -122,19 +100,8 @@ Vagrant.configure("2") do |config|
     master.vm.provision :shell, :inline => $master_script
   end
 
-  config.vm.define :slave1 do |slave1,override|
-    slave1.vm.box = "aws_dummy"
-    slave1.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-    slave1.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-    slave1.secret_access_key = "nrsTCWupE8Sf7jCv8+dk5uAAW1YLW7CJzNtxkLSO"
-    slave1.region_config "us-east-1", :ami => "ami-a73264ce"
-    slave1.keypair_name = 'ec2_key'
-    slave1.instance_type
-    slave1.security_groups = 'vagrant'
-
-    override.ssh.username = "ubuntu"
-    override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
-    # slave1.vm.box = "precise64"
+  config.vm.define :slave1 do |slave1|
+    slave1.vm.box = "aws_box"
     # slave1.vm.provider :virtualbox do |v|
     #   v.name = "vm-cluster-node2"
     #   v.customize ["modifyvm", :id, "--memory", "4096"]
@@ -144,19 +111,8 @@ Vagrant.configure("2") do |config|
     slave1.vm.provision :shell, :inline => $slave_script
   end
 
-  config.vm.define :slave2 do |slave2,override|
-    slave2.vm.box = "aws_dummy"
-    slave2.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-    slave2.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-    slave2.secret_access_key = "nrsTCWupE8Sf7jCv8+dk5uAAW1YLW7CJzNtxkLSO"
-    slave2.region_config "us-east-1", :ami => "ami-a73264ce"
-    slave2.keypair_name = 'ec2_key'
-    slave2.instance_type
-    slave2.security_groups = 'vagrant'
-
-    override.ssh.username = "ubuntu"
-    override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
-    # slave2.vm.box = "precise64"
+  config.vm.define :slave2 do |slave2|
+    slave2.vm.box = "aws_box"
     # slave2.vm.provider :virtualbox do |v|
     #   v.name = "vm-cluster-node3"
     #   v.customize ["modifyvm", :id, "--memory", "4096"]
@@ -188,16 +144,8 @@ Vagrant.configure("2") do |config|
   #   slave4.vm.provision :shell, :inline => $slave_script
   # end
 
-  config.vm.define :client do |client,override|
-    client.vm.box = "aws_dummy"
-    client.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
-    client.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-    client.secret_access_key = "nrsTCWupE8Sf7jCv8+dk5uAAW1YLW7CJzNtxkLSO"
-    client.region_config "us-east-1", :ami => "ami-a73264ce"
-    client.keypair_name = 'ec2_key'
-    client.instance_type
-    client.security_groups = 'vagrant'
-    # client.vm.box = "precise64"
+  config.vm.define :client do |client|
+    client.vm.box = "aws_box"
     # client.vm.provider :virtualbox do |v|
     #   v.name = "vm-cluster-client"
     #   v.customize ["modifyvm", :id, "--memory", "4096"]

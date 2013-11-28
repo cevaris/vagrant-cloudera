@@ -1,0 +1,18 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.provider :aws do |aws, override|
+    aws.keypair_name = "ec2_key"
+    aws.access_key_id = "AKIAIKKACIRQPH57FHBQ"
+    aws.secret_access_key = "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"
+    # aws.instance_type = "t1.micro"
+    aws.security_groups = ["vagrant"]
+    aws.ami = "ami-a73264ce"
+    override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
+    override.ssh.username = "ubuntu"
+    aws.tags = {
+      'Name' => 'vm-cluster-node1',
+     }
+  end
+end
