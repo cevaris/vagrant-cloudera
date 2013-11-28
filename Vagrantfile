@@ -3,23 +3,23 @@
 
 $master_script = <<SCRIPT
 #!/bin/bash
-cat > /etc/hosts <<EOF
-127.0.0.1       localhost
+# cat > /etc/hosts <<EOF
+# 127.0.0.1       localhost
 
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+# # The following lines are desirable for IPv6 capable hosts
+# ::1     ip6-localhost ip6-loopback
+# fe00::0 ip6-localnet
+# ff00::0 ip6-mcastprefix
+# ff02::1 ip6-allnodes
+# ff02::2 ip6-allrouters
 
-10.211.55.100   vm-cluster-node1
-10.211.55.101   vm-cluster-node2
-10.211.55.102   vm-cluster-node3
-10.211.55.103   vm-cluster-node4
-10.211.55.104   vm-cluster-node5
-10.211.55.105   vm-cluster-client
-EOF
+# 10.211.55.100   vm-cluster-node1
+# 10.211.55.101   vm-cluster-node2
+# 10.211.55.102   vm-cluster-node3
+# 10.211.55.103   vm-cluster-node4
+# 10.211.55.104   vm-cluster-node5
+# 10.211.55.105   vm-cluster-client
+# EOF
 
 apt-get install curl -y
 REPOCM=${REPOCM:-cm4}
@@ -45,96 +45,56 @@ service cloudera-scm-server-db start
 service cloudera-scm-server start
 SCRIPT
 
-$slave_script = <<SCRIPT
-cat > /etc/hosts <<EOF
-127.0.0.1       localhost
+# $slave_script = <<SCRIPT
+# cat > /etc/hosts <<EOF
+# 127.0.0.1       localhost
 
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+# # The following lines are desirable for IPv6 capable hosts
+# ::1     ip6-localhost ip6-loopback
+# fe00::0 ip6-localnet
+# ff00::0 ip6-mcastprefix
+# ff02::1 ip6-allnodes
+# ff02::2 ip6-allrouters
 
-10.211.55.100   vm-cluster-node1
-10.211.55.101   vm-cluster-node2
-10.211.55.102   vm-cluster-node3
-10.211.55.103   vm-cluster-node4
-10.211.55.104   vm-cluster-node5
-10.211.55.105   vm-cluster-client
-EOF
-SCRIPT
+# 10.211.55.100   vm-cluster-node1
+# 10.211.55.101   vm-cluster-node2
+# 10.211.55.102   vm-cluster-node3
+# 10.211.55.103   vm-cluster-node4
+# 10.211.55.104   vm-cluster-node5
+# 10.211.55.105   vm-cluster-client
+# EOF
+# SCRIPT
 
-$client_script = <<SCRIPT
-cat > /etc/hosts <<EOF
-127.0.0.1       localhost
+# $client_script = <<SCRIPT
+# cat > /etc/hosts <<EOF
+# 127.0.0.1       localhost
 
-# The following lines are desirable for IPv6 capable hosts
-::1     ip6-localhost ip6-loopback
-fe00::0 ip6-localnet
-ff00::0 ip6-mcastprefix
-ff02::1 ip6-allnodes
-ff02::2 ip6-allrouters
+# # The following lines are desirable for IPv6 capable hosts
+# ::1     ip6-localhost ip6-loopback
+# fe00::0 ip6-localnet
+# ff00::0 ip6-mcastprefix
+# ff02::1 ip6-allnodes
+# ff02::2 ip6-allrouters
 
-10.211.55.100   vm-cluster-node1
-10.211.55.101   vm-cluster-node2
-10.211.55.102   vm-cluster-node3
-10.211.55.103   vm-cluster-node4
-10.211.55.104   vm-cluster-node5
-10.211.55.105   vm-cluster-client
-EOF
-SCRIPT
+# 10.211.55.100   vm-cluster-node1
+# 10.211.55.101   vm-cluster-node2
+# 10.211.55.102   vm-cluster-node3
+# 10.211.55.103   vm-cluster-node4
+# 10.211.55.104   vm-cluster-node5
+# 10.211.55.105   vm-cluster-client
+# EOF
+# SCRIPT
 
 Vagrant.configure("2") do |config|
   config.cache.auto_detect = true
 
   config.vm.define :master do |master|
     master.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-node1', }
+      aws.tags = { 'Name' => 'vm-cluster-master', }
     end
     master.vm.box = "aws_ubuntu"
     master.vm.provision :shell, :inline => $master_script
 
-  end
-
-  config.vm.define :slave1 do |slave1|
-    slave1.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-node2', }
-    end
-    slave1.vm.box = "aws_ubuntu"
-    slave1.vm.provision :shell, :inline => $slave_script
-  end
-
-  config.vm.define :slave2 do |slave2|
-    slave2.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-node3', }
-    end
-    slave2.vm.box = "aws_ubuntu"
-    slave2.vm.provision :shell, :inline => $slave_script
-  end
-
-  config.vm.define :slave3 do |slave3|
-    slave3.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-node4', }
-    end
-    slave3.vm.box = "aws_ubuntu"
-    slave3.vm.provision :shell, :inline => $slave_script
-  end
-
-  config.vm.define :slave4 do |slave4|
-    slave4.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-node5', }
-    end
-    slave4.vm.box = "aws_ubuntu"
-    slave4.vm.provision :shell, :inline => $slave_script
-  end
-
-  config.vm.define :client do |client|
-    client.vm.provider :aws do |aws|
-      aws.tags = { 'Name' => 'vm-cluster-client', }
-    end
-    client.vm.box = "aws_ubuntu"
-    client.vm.provision :shell, :inline => $client_script
   end
 
 end
