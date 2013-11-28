@@ -89,36 +89,21 @@ Vagrant.configure("2") do |config|
   config.cache.auto_detect = true
 
   config.vm.define :master do |master|
-    master.vm.box = "aws_box"
-    # master.vm.provider :virtualbox do |v|
-    #   v.name = "vm-cluster-node1"
-    #   v.customize ["modifyvm", :id, "--memory", "4096"]
-    # end
-    # master.vm.network :private_network, ip: "10.211.55.100"
-    # config.vm.network :forwarded_port, guest: 8080, host: 7180
-    master.vm.hostname = "vm-cluster-node1"
+    master.vm.box = "aws_ubuntu"
+    master.tags = { 'Name' => 'vm-cluster-node1', }
     master.vm.provision :shell, :inline => $master_script
+
   end
 
   config.vm.define :slave1 do |slave1|
-    slave1.vm.box = "aws_box"
-    # slave1.vm.provider :virtualbox do |v|
-    #   v.name = "vm-cluster-node2"
-    #   v.customize ["modifyvm", :id, "--memory", "4096"]
-    # end
-    # slave1.vm.network :private_network, ip: "10.211.55.101"
-    slave1.vm.hostname = "vm-cluster-node2"
+    slave1.vm.box = "aws_ubuntu"
+    slave1.tags = { 'Name' => 'vm-cluster-node2', }
     slave1.vm.provision :shell, :inline => $slave_script
   end
 
   config.vm.define :slave2 do |slave2|
-    slave2.vm.box = "aws_box"
-    # slave2.vm.provider :virtualbox do |v|
-    #   v.name = "vm-cluster-node3"
-    #   v.customize ["modifyvm", :id, "--memory", "4096"]
-    # end
-    # slave2.vm.network :private_network, ip: "10.211.55.102"
-    slave2.vm.hostname = "vm-cluster-node3"
+    slave2.vm.box = "aws_ubuntu"
+    slave2.tags = { 'Name' => 'vm-cluster-node3', }
     slave2.vm.provision :shell, :inline => $slave_script
   end
 
@@ -145,15 +130,9 @@ Vagrant.configure("2") do |config|
   # end
 
   config.vm.define :client do |client|
-    client.vm.box = "aws_box"
-    # client.vm.provider :virtualbox do |v|
-    #   v.name = "vm-cluster-client"
-    #   v.customize ["modifyvm", :id, "--memory", "4096"]
-    # end
-    # client.vm.network :private_network, ip: "10.211.55.105"
-    client.vm.hostname = "vm-cluster-client"
+    client.vm.box = "aws_ubuntu"
+    client.tags = { 'Name' => 'vm-cluster-client', }
     client.vm.provision :shell, :inline => $client_script
-
   end
 
 end

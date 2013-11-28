@@ -4,15 +4,13 @@
 Vagrant.configure("2") do |config|
   config.vm.provider :aws do |aws, override|
     aws.keypair_name = "ec2_key"
-    aws.access_key_id = "AKIAIKKACIRQPH57FHBQ"
-    aws.secret_access_key = "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"
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
     # aws.instance_type = "t1.micro"
     aws.security_groups = ["vagrant"]
     aws.ami = "ami-a73264ce"
-    override.ssh.private_key_path = "/Users/cevaris/.ssh/ec2_key"
+    override.ssh.private_key_path = ENV['AWS_PRIVATE_KEY']
     override.ssh.username = "ubuntu"
-    aws.tags = {
-      'Name' => 'vm-cluster-node1',
-     }
+    # aws.tags = { 'Name' => 'ec2-vagracluster', }
   end
 end
