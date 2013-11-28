@@ -89,49 +89,51 @@ Vagrant.configure("2") do |config|
   config.cache.auto_detect = true
 
   config.vm.define :master do |master|
+    master.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-node1', }
+    end
     master.vm.box = "aws_ubuntu"
-    master.tags = { 'Name' => 'vm-cluster-node1', }
     master.vm.provision :shell, :inline => $master_script
 
   end
 
   config.vm.define :slave1 do |slave1|
+    slave1.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-node2', }
+    end
     slave1.vm.box = "aws_ubuntu"
-    slave1.tags = { 'Name' => 'vm-cluster-node2', }
     slave1.vm.provision :shell, :inline => $slave_script
   end
 
   config.vm.define :slave2 do |slave2|
+    slave2.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-node3', }
+    end
     slave2.vm.box = "aws_ubuntu"
-    slave2.tags = { 'Name' => 'vm-cluster-node3', }
     slave2.vm.provision :shell, :inline => $slave_script
   end
 
-  # config.vm.define :slave3 do |slave3|
-  #   slave3.vm.box = "precise64"
-  #   slave3.vm.provider :virtualbox do |v|
-  #     v.name = "vm-cluster-node4"
-  #     v.customize ["modifyvm", :id, "--memory", "4096"]
-  #   end
-  #   slave3.vm.network :private_network, ip: "10.211.55.103"
-  #   slave3.vm.hostname = "vm-cluster-node4"
-  #   slave3.vm.provision :shell, :inline => $slave_script
-  # end
+  config.vm.define :slave3 do |slave3|
+    slave3.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-node4', }
+    end
+    slave3.vm.box = "aws_ubuntu"
+    slave3.vm.provision :shell, :inline => $slave_script
+  end
 
-  # config.vm.define :slave4 do |slave4|
-  #   slave4.vm.box = "precise64"
-  #   slave4.vm.provider :virtualbox do |v|
-  #     v.name = "vm-cluster-node5"
-  #     v.customize ["modifyvm", :id, "--memory", "4096"]
-  #   end
-  #   slave4.vm.network :private_network, ip: "10.211.55.104"
-  #   slave4.vm.hostname = "vm-cluster-node5"
-  #   slave4.vm.provision :shell, :inline => $slave_script
-  # end
+  config.vm.define :slave4 do |slave4|
+    slave4.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-node5', }
+    end
+    slave4.vm.box = "aws_ubuntu"
+    slave4.vm.provision :shell, :inline => $slave_script
+  end
 
   config.vm.define :client do |client|
+    client.vm.provider :aws do |aws|
+      aws.tags = { 'Name' => 'vm-cluster-client', }
+    end
     client.vm.box = "aws_ubuntu"
-    client.tags = { 'Name' => 'vm-cluster-client', }
     client.vm.provision :shell, :inline => $client_script
   end
 
