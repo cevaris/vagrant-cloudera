@@ -85,6 +85,7 @@ SCRIPT
 # EOF
 # SCRIPT
 
+
 Vagrant.configure("2") do |config|
   config.cache.auto_detect = true
 
