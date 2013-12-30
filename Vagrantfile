@@ -1,7 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$master_script = %{
+key = File.new("#{Dir.home}/.ssh/vagrant-keys/id_rsa.pub").read()
+
+$all_script = %{
 #!/bin/bash
 cat > /etc/hosts <<EOF
 127.0.0.1       localhost
@@ -36,7 +38,9 @@ echo "#{key}" >> .ssh/authorized_keys
 echo "Done adding authorized_keys"
 
 echo "Script done..."
+}
 
+$master_script = %{
 apt-get install curl -y
 REPOCM=${REPOCM:-cm4}
 CM_REPO_HOST=${CM_REPO_HOST:-archive.cloudera.com}
@@ -91,9 +95,14 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--memory", "1024"]
       end
 
+      node.vm.network "forwarded_port", guest: 7180, host: 7180
       node.vm.network :private_network, ip: "#{options[:ip]}"
       node.vm.hostname = "#{options[:name]}"
-      node.vm.provision :shell, :inline => $master_script
+      node.vm.provision :shell, :inline => $all_script
+
+      if options[:name] == 'node0'
+         node.vm.provision :shell, :inline => $master_script
+      end
 
     end
 
