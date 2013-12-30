@@ -74,7 +74,7 @@ id = 0
 while id < server_count
   name = 'node' + (id).to_s
   ip = base_network + (base_ip + id).to_s
-  servers << {:name => name, :ip => ip}
+  servers << {:name => name, :ip => ip, :id => id}
   id += 1
 end
 
@@ -85,25 +85,34 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "#{options[:name]}" do |node|
       
-      node.vm.box = "precise64"
-      node.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
-      # node.vm.box = "centos6"
-      # node.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v0.1.0/centos64-x86_64-20131030.box"
-
-      node.vm.provider :virtualbox do |v|
-        v.name = "#{options[:name]}"
-        v.customize ["modifyvm", :id, "--memory", "1024"]
-      end
-
-      node.vm.network "forwarded_port", guest: 7180, host: 7180
+      #node.vm.box = "precise64"
+      node.vm.box = "precise64guest"
+      #node.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-amd64-vagrant-disk1.box"
+      node.vm.box_url = 'http://dl.dropbox.com/u/1537815/precise64.box'
+      
       node.vm.network :private_network, ip: "#{options[:ip]}"
       node.vm.hostname = "#{options[:name]}"
       node.vm.provision :shell, :inline => $all_script
 
-      if options[:name] == 'node0'
+      if options[:id] == 0
+         # Cloudera Manager Machine
+         node.vm.network "forwarded_port", guest: 7180, host: 7180
          node.vm.provision :shell, :inline => $master_script
+
+         node.vm.provider :virtualbox do |v|
+           v.name = "#{options[:name]}"
+           v.customize ["modifyvm", :id, "--memory", "2048"]
+         end
+      else
+         # Slaves
+         node.vm.provider :virtualbox do |v|
+           v.name = "#{options[:name]}"
+           v.customize ["modifyvm", :id, "--memory", "1024"]
+         end
       end
 
+
+  
     end
 
   end
